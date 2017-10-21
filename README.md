@@ -96,5 +96,5 @@ TODO
 
 ## TODO
 
-[ ] Per bucket config loading
-[ ] Pluggable shared data structure
+- [ ] Per bucket config loading
+- [ ] Pluggable shared data structure

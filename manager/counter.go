@@ -1,7 +1,6 @@
 package manager
 
 import (
-	"fmt"
 	"sync"
 	"time"
 )
@@ -130,8 +129,6 @@ func (c *counter) Incr(d int64) {
 	}
 	// increment bucket
 	b.c += d
-
-	fmt.Println(b.c)
 
 	// set update time
 	b.last = time.Now()

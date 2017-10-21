@@ -93,3 +93,8 @@ TODO
 ### API Plugin
 
 TODO
+
+## TODO
+
+[ ] Per bucket config loading
+[ ] Pluggable shared data structure

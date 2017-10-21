@@ -88,7 +88,21 @@ Specify flags to set the window size, rate limit, total limit and idle ttl.
 
 ### Wrappers
 
-TODO
+A client wrapper will call the quota service before every request to make an allocation. This is a naive implementation. Ideally it should be performed 
+in the background.
+
+```
+import (
+	"github.com/micro/go-micro"
+	"github.com/micro/go-plugins/wrapper/ratelimiter/quota"
+)
+
+srv := micro.NewService(
+	micro.WrapClient(
+		quota.NewClientWrapper("my.service"),
+	),
+)
+```
 
 ### API Plugin
 

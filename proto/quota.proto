@@ -1,0 +1,59 @@
+syntax = "proto3";
+
+service Quota {
+	rpc Allocate(AllocateRequest) returns(AllocateResponse) {};
+}
+
+message AllocateRequest {
+	// name of the resource being used e.g api.maps
+	string resource = 1;
+	// shared bucket for the client e.g ip address, service name
+	string bucket = 2;
+	// resource allocation e.g 10 requests
+	int64 allocation = 3;
+}
+
+message AllocateResponse {
+	enum Status {
+		OK = 0;
+		REJECT_TOO_MANY_REQUESTS = 1;
+		REJECT_SERVER_ERROR = 2;
+	}
+
+	// status of this allocation
+	Status status = 1;
+	// resource allocation provided
+	int64 allocation = 2;
+}
+
+// Config for the quota manager
+message Config {
+	// window over which to manage quota
+	int64 window_size = 1;
+	// per second rate limit
+	int64 rate_limit = 2;
+	// total limit over the window
+	int64 total_limit = 3;
+	// ttl after which to expire idle bucket
+	int64 idle_ttl = 4;
+}
+
+message Allocation {
+	// name of the resource being used e.g api.maps
+	string resource = 1;
+	// shared bucket for the client e.g ip address, service name
+	string bucket = 2;
+	// total used e.g 10 requests
+	int64 total = 3;
+	// time at which the allocation occurred. unix timestamp
+	int64 timestamp = 4;	
+}
+
+message Update {
+	// unique id of this update or the sender
+	string id = 1;
+	// time at which it was published
+	int64 timestamp = 2;
+	// the allocations made
+	repeated Allocation allocations = 3;
+}

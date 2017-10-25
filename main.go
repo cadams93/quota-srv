@@ -13,9 +13,6 @@ import (
 	"github.com/micro/quota-srv/subscriber"
 )
 
-// idle time
-// window size
-
 var (
 	updateTopic = "go.micro.srv.quota.update"
 

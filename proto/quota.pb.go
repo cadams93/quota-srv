@@ -21,9 +21,8 @@ import fmt "fmt"
 import math "math"
 
 import (
-	client "github.com/micro/go-micro/client"
-	server "github.com/micro/go-micro/server"
 	context "golang.org/x/net/context"
+	grpc "google.golang.org/grpc"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -257,37 +256,29 @@ func init() {
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ context.Context
-var _ client.Option
-var _ server.Option
+var _ grpc.ClientConn
+
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the grpc package it is being compiled against.
+const _ = grpc.SupportPackageIsVersion4
 
 // Client API for Quota service
 
 type QuotaClient interface {
-	Allocate(ctx context.Context, in *AllocateRequest, opts ...client.CallOption) (*AllocateResponse, error)
+	Allocate(ctx context.Context, in *AllocateRequest, opts ...grpc.CallOption) (*AllocateResponse, error)
 }
 
 type quotaClient struct {
-	c           client.Client
-	serviceName string
+	cc *grpc.ClientConn
 }
 
-func NewQuotaClient(serviceName string, c client.Client) QuotaClient {
-	if c == nil {
-		c = client.NewClient()
-	}
-	if len(serviceName) == 0 {
-		serviceName = "quota"
-	}
-	return &quotaClient{
-		c:           c,
-		serviceName: serviceName,
-	}
+func NewQuotaClient(cc *grpc.ClientConn) QuotaClient {
+	return &quotaClient{cc}
 }
 
-func (c *quotaClient) Allocate(ctx context.Context, in *AllocateRequest, opts ...client.CallOption) (*AllocateResponse, error) {
-	req := c.c.NewRequest(c.serviceName, "Quota.Allocate", in)
+func (c *quotaClient) Allocate(ctx context.Context, in *AllocateRequest, opts ...grpc.CallOption) (*AllocateResponse, error) {
 	out := new(AllocateResponse)
-	err := c.c.Call(ctx, req, out, opts...)
+	err := grpc.Invoke(ctx, "/Quota/Allocate", in, out, c.cc, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -296,20 +287,43 @@ func (c *quotaClient) Allocate(ctx context.Context, in *AllocateRequest, opts ..
 
 // Server API for Quota service
 
-type QuotaHandler interface {
-	Allocate(context.Context, *AllocateRequest, *AllocateResponse) error
+type QuotaServer interface {
+	Allocate(context.Context, *AllocateRequest) (*AllocateResponse, error)
 }
 
-func RegisterQuotaHandler(s server.Server, hdlr QuotaHandler, opts ...server.HandlerOption) {
-	s.Handle(s.NewHandler(&Quota{hdlr}, opts...))
+func RegisterQuotaServer(s *grpc.Server, srv QuotaServer) {
+	s.RegisterService(&_Quota_serviceDesc, srv)
 }
 
-type Quota struct {
-	QuotaHandler
+func _Quota_Allocate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AllocateRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QuotaServer).Allocate(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/Quota/Allocate",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QuotaServer).Allocate(ctx, req.(*AllocateRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
-func (h *Quota) Allocate(ctx context.Context, in *AllocateRequest, out *AllocateResponse) error {
-	return h.QuotaHandler.Allocate(ctx, in, out)
+var _Quota_serviceDesc = grpc.ServiceDesc{
+	ServiceName: "Quota",
+	HandlerType: (*QuotaServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "Allocate",
+			Handler:    _Quota_Allocate_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "github.com/micro/quota-srv/proto/quota.proto",
 }
 
 func init() { proto.RegisterFile("github.com/micro/quota-srv/proto/quota.proto", fileDescriptor0) }

@@ -43,7 +43,7 @@ Prerequisite: Run service discovery
 Get service 
 
 ```
-go get github.com/micro/quota-srv
+go get github.com/microhq/quota-srv
 ```
 
 Run service

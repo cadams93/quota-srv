@@ -7,10 +7,10 @@ import (
 	"github.com/micro/go-log"
 	"github.com/micro/go-micro"
 
-	"github.com/micro/quota-srv/handler"
-	"github.com/micro/quota-srv/manager"
-	proto "github.com/micro/quota-srv/proto"
-	"github.com/micro/quota-srv/subscriber"
+	"github.com/microhq/quota-srv/handler"
+	"github.com/microhq/quota-srv/manager"
+	proto "github.com/microhq/quota-srv/proto"
+	"github.com/microhq/quota-srv/subscriber"
 )
 
 var (

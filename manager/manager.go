@@ -8,7 +8,7 @@ import (
 	"github.com/micro/go-micro"
 	"github.com/pborman/uuid"
 
-	proto "github.com/micro/quota-srv/proto"
+	proto "github.com/microhq/quota-srv/proto"
 	"golang.org/x/net/context"
 )
 

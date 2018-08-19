@@ -2,8 +2,8 @@ package handler
 
 import (
 	"github.com/micro/go-micro/errors"
-	quota "github.com/micro/quota-srv/manager"
-	proto "github.com/micro/quota-srv/proto"
+	quota "github.com/microhq/quota-srv/manager"
+	proto "github.com/microhq/quota-srv/proto"
 
 	"golang.org/x/net/context"
 )

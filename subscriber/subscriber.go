@@ -1,8 +1,8 @@
 package subscriber
 
 import (
-	"github.com/micro/quota-srv/manager"
-	proto "github.com/micro/quota-srv/proto"
+	"github.com/microhq/quota-srv/manager"
+	proto "github.com/microhq/quota-srv/proto"
 
 	"golang.org/x/net/context"
 )
